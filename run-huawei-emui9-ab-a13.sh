@@ -182,6 +182,7 @@ mount -o loop,rw s-ab-raw.img d
 	
 	# bluetooth
 	echo "bluetooth.enable_timeout_ms=12000" >> build.prop
+	echo "persist.sys.bt.esco_transport_unit_size=16" >> build.prop
 	
 	# Usb
 	echo "persist.sys.usb.config=hisuite,mtp,mass_storage" >> build.prop 
@@ -354,13 +355,17 @@ mount -o loop,rw s-ab-raw.img d
 		echo "ro.product.system_ext.device=HWFIG" >>  system_ext/etc/build.prop
 		echo "ro.product.system_ext.brand=HUAWEI" >>  system_ext/etc/build.prop
 		echo "ro.build.product=FIG" >> build.prop
-		
 		echo "ro.lineage.device=HWFIG" >>  build.prop
+		
+		# From iceows supl20 apk (# Hisi)
+		echo "is_hisi_connectivity_chip=1" >> build.prop
+		echo "ro.hardware.consumerir=hisi.hi6250" >> build.prop		
+		echo "ro.hardware.hisupl=hi1102"  >> build.prop;
 	fi
 			
 	
 
-	# ANE-LX1 Huawei P20 Lite 2017
+	# ANE-LX1 Huawei P20 Lite
 	if [ "$model" == "ANE-LX1" ];then
 		# NFC 
 		cp "$origin/files-patch/system/etc/NFC/libnfc_brcm_anne.conf" etc/libnfc-brcm.conf
@@ -390,6 +395,12 @@ mount -o loop,rw s-ab-raw.img d
 		echo "ro.product.system_ext.device=HWANE" >>  system_ext/etc/build.prop
 		echo "ro.product.system_ext.brand=HUAWEI" >>  system_ext/etc/build.prop
 		echo "ro.build.product=ANE" >> build.prop
+		echo "ro.lineage.device=HWANE" >>  build.prop
+				
+		# From iceows supl20 apk (# Hisi)
+		echo "is_hisi_connectivity_chip=1" >> build.prop
+		echo "ro.hardware.consumerir=hisi.hi6250" >> build.prop		
+		echo "ro.hardware.hisupl=hi1102"  >> build.prop;
 	fi	
 
 
@@ -606,12 +617,7 @@ mount -o loop,rw s-ab-raw.img d
 		echo "(allow system_app hi110x_vendor_file (file (open read)))" >>  etc/selinux/plat_sepolicy.cil 
 
 
-		# ------------------------------------ #
-		
-		# From iceows supl20 apk (# Hisi)
-		echo "is_hisi_connectivity_chip=1" >> build.prop
-		echo "ro.hardware.consumerir=hisi.hi6250" >> build.prop		
-		echo "ro.hardware.hisupl=hi1102"  >> build.prop;
+
 	fi
 	
 

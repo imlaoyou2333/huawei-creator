@@ -403,6 +403,25 @@ mount -o loop,rw s-ab-raw.img d
 		echo "ro.hardware.hisupl=hi1102"  >> build.prop;
 	fi	
 
+	# STF-L09 Huawei Honor 9 (L09 - L29)
+	if [ "$model" == "BND-L21" ];then
+
+		echo "ro.product.brand=[HONOR]" >> build.prop
+		echo "ro.product.device=HWBND-H" >> build.prop	
+		echo "ro.product.system.device=HWBND-H" >>  build.prop
+		echo "ro.product.system.brand=HONOR" >>  build.prop	
+		echo "ro.product.product.device=HWBND-H" >>  product/etc/build.prop
+		echo "ro.product.product.brand=HONOR" >>  product/etc/build.prop	
+		echo "ro.product.system_ext.device=HWBND-H" >>  system_ext/etc/build.prop
+		echo "ro.product.system_ext.brand=HONOR" >>  system_ext/etc/build.prop
+		echo "ro.build.product=BND" >> build.prop
+		
+		# Perhaps also replace fingerprint
+		#[ro.build.description]: [BND-L21-user 9.1.0 HUAWEIBND-L21 194-LGRP2-OVS release-keys]
+		#[ro.build.display.id]: [BND-L21 9.1.0.174(C185E2R1P2)]
+		#[ro.build.fingerprint]: [HONOR/BND-L21/HWBND-H:9/HONORBND-L21/9.1.0.174C185:user/release-keys]
+		
+	fi
 
 	# STF-L09 Huawei Honor 9 (L09 - L29)
 	if [ "$model" == "STF-L09" ];then

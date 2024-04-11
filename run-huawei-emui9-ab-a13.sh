@@ -362,8 +362,6 @@ mount -o loop,rw s-ab-raw.img d
 		echo "ro.hardware.consumerir=hisi.hi6250" >> build.prop		
 		echo "ro.hardware.hisupl=hi1102"  >> build.prop;
 	fi
-			
-	
 
 	# ANE-LX1 Huawei P20 Lite
 	if [ "$model" == "ANE-LX1" ];then
@@ -403,7 +401,7 @@ mount -o loop,rw s-ab-raw.img d
 		echo "ro.hardware.hisupl=hi1102"  >> build.prop;
 	fi	
 
-	# STF-L09 Huawei Honor 9 (L09 - L29)
+	# BND-L21
 	if [ "$model" == "BND-L21" ];then
 
 		echo "ro.product.brand=[HONOR]" >> build.prop

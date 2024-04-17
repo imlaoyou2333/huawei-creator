@@ -523,7 +523,7 @@ mount -o loop,rw s-ab-raw.img d
 	# 2000 = shell
 	chown root:2000 bin/tee_auth_daemon
 	cp "$origin/files-patch/system/bin/79b77788-9789-4a7a-a2be-b60155eef5f4.sec" bin/79b77788-9789-4a7a-a2be-b60155eef5f4.sec
-	xattr -w security.selinux u:object_r:system_file:s0  bin/79b77788-9789-4a7a-a2be-b60155eef5f4
+	xattr -w security.selinux u:object_r:system_file:s0  bin/79b77788-9789-4a7a-a2be-b60155eef5f4.sec
 	cp "$origin/files-patch/system/lib64/libc_secshared.so" lib64/libc_secshared.so
 	xattr -w security.selinux u:object_r:system_lib_file:s0  lib64/libc_secshared.so
 	cp "$origin/files-patch/system/lib64/libtuidaemon.so" lib64/libtuidaemon.so

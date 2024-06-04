@@ -478,6 +478,47 @@ mount -o loop,rw s-ab-raw.img d
 	cp "$origin/files-patch/system/bin/79b77788-9789-4a7a-a2be-b60155eef5f4.sec" bin/79b77788-9789-4a7a-a2be-b60155eef5f4.sec
 	xattr -w security.selinux u:object_r:system_file:s0  bin/79b77788-9789-4a7a-a2be-b60155eef5f4
 	
+
+	# GPU Assistant
+	cp "$origin/files-patch/system/etc/init/init.gpu.rc" etc/init/init.gpu.rc
+	xattr -w security.selinux u:object_r:system_file:s0 etc/init/init.gpu.rc
+	
+	cp "$origin/files-patch/system/bin/gpuassistant" system_ext/bin/gpuassistant
+	xattr -w security.selinux u:object_r:gpuassistant_exec:s0  system_ext/bin/gpuassistant
+	chmod 755 system_ext/bin/gpuassistant
+	chown root:2000 system_ext/bin/gpuassistant
+	cp "$origin/files-patch/system/lib64/libgpuassistant_client.so" system_ext/lib64/libgpuassistant_client.so
+	xattr -w security.selinux u:object_r:system_lib_file:s0  system_ext/lib64/libgpuassistant_client.so
+	cp "$origin/files-patch/system/lib64/libgpuassistant_service.so" system_ext/lib64/libgpuassistant_service.so
+	xattr -w security.selinux u:object_r:system_lib_file:s0  system_ext/lib64/libgpuassistant_service.so
+	cp "$origin/files-patch/system/lib64/vendor.huawei.hardware.graphics.gpucommon@1.0.so" system_ext/lib64/vendor.huawei.hardware.graphics.gpucommon@1.0.so
+	xattr -w security.selinux u:object_r:system_lib_file:s0  system_ext/lib64/vendor.huawei.hardware.graphics.gpucommon@1.0.so
+	# libimonitor
+	
+	echo "(genfscon proc /device-tree/hisi,gpu_es (u object_r gpuassistant_devicetree ((s0) (s0))))" >> etc/selinux/plat_sepolicy.cil
+	echo "(genfscon sysfs /firmware/devicetree/base/hisi,gpu_es (u object_r gpuassistant_devicetree ((s0) (s0))))" >> etc/selinux/plat_sepolicy.cil
+
+	echo "(allow bluetooth gpuassistant (binder (call)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow bluetooth gpuassistant (fd (use)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow init gpuassistant_exec (file (read getattr map execute open)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow init gpuassistant (process (transition)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow gpuassistant gpuassistant_exec (file (read getattr map execute entrypoint open)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(dontaudit init gpuassistant (process (noatsecure)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow init gpuassistant (process (siginh rlimitinh)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(typetransition init gpuassistant_exec process gpuassistant)" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow servicemanager gpuassistant (dir (search)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow servicemanager gpuassistant (file (read open)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow servicemanager gpuassistant (process (getattr)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow shell gpuassistant (binder (call)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow surfaceflinger gpuassistant (binder (call)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow system_app gpuassistant (binder (call)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow system_app gpuassistant (fd (use)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow gpuassistant property_socket (sock_file (write)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow gpuassistant init (unix_stream_socket (connectto)))" >> etc/selinux/plat_sepolicy.cil
+	
+	echo "(allow init gpuassistant (process (siginh rlimitinh)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(typetransition init gpuassistant_exec process gpuassistant)" >> etc/selinux/plat_sepolicy.cil
+
 	
 	# Codec bluetooth 32 bits
 	cp "$origin/files-patch/system/lib/libaptX_encoder.so" lib/libaptX_encoder.so
@@ -655,6 +696,10 @@ mount -o loop,rw s-ab-raw.img d
 	#(roletype object_r netflix_certification_prop)
 
 
+	echo "(allow surfaceflinger vendor_default_prop (file (open read getattr)))" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow aptouch_daemon dft_syshwdebug_prop (file (open read getattr)))" >> etc/selinux/plat_sepolicy.cil
+
+
 	# ------------------- etc/selinux/mapping/28.0.cil ------------------
 
 	echo "(typeattributeset kirin_audio_prop_28_0 (kirin_audio_prop))" >> etc/selinux/mapping/28.0.cil
@@ -747,6 +792,20 @@ mount -o loop,rw s-ab-raw.img d
 	# Enable lowlatency
 	echo "persist.media.lowlatency.enable=true" >> build.prop
 	echo "persist.kirin.media.lowlatency.enable=true" >> build.prop
+
+	#----------------------------- GPU Assistant --------------------------------------------------------
+			
+	echo "/system/bin/gpuassistant   u:object_r:gpuassistant_exec:s0" >> etc/selinux/plat_file_contexts	
+	echo "(type gpuassistant_exec)" >> etc/selinux/plat_sepolicy.cil
+	echo "(roletype object_r gpuassistant_exec)" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow init gpuassistant_exec (file (read getattr map execute open)))" >> etc/selinux/plat_sepolicy.cil
+
+	echo "(type gpuassistant)" >> etc/selinux/plat_sepolicy.cil
+	echo "(roletype object_r gpuassistant)" >> etc/selinux/plat_sepolicy.cil
+	
+	echo "(type gpuassistant_devicetree)" >> etc/selinux/plat_sepolicy.cil
+	echo "(roletype object_r gpuassistant_devicetree)" >> etc/selinux/plat_sepolicy.cil
+	echo "(allow gpuassistant gpuassistant_devicetree (dir (search)))" >> etc/selinux/plat_sepolicy.cil
 
 
 	#-----------------------------vndk-lite --------------------------------------------------------	
